@@ -5,6 +5,7 @@ import com.nestgroup.TODO.App.Backend.model.TodoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,5 +32,12 @@ public class TodoController {
     @PostMapping("/viewTodo")
     public List<Map<String,String>> viewTodoByUserId(@RequestBody TodoModel todoModel){
         return (List<Map<String,String>>) todoDao.findAll(todoModel.getUser_id());
+    }
+
+    @Transactional
+    @CrossOrigin(origins = "*")
+    @PostMapping("/status")
+    public void changeStatus(@RequestBody TodoModel todoModel){
+        todoDao.changeStatus(todoModel.getId(), todoModel.isStatus());
     }
 }
